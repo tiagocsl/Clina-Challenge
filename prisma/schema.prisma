@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:211200@localhost:5432/clina-challenge"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  fullName  String
+  password  String
+  createdAt DateTime
+  updatedAt DateTime @default(now())
+
+  @@index([email])
+}
+
+model Room {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  cep          String
+  publicPlace  String
+  neighborhood String
+  uf           String
+  city         String
+  country      String
+  number       String
+  complement   String?
+  createdAt    DateTime
+  updatedAt    DateTime @default(now())
+
+  schedules Schedule[]
+}
+
+model Schedule {
+  id        Int      @id @default(autoincrement())
+  day       DateTime
+  period    String
+  status    String
+  createdAt DateTime
+  updatedAt DateTime @default(now())
+
+  roomId Int  
+  Room   Room @relation(fields: [roomId], references: [id])
+}

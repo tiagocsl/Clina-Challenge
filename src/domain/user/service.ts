@@ -1,0 +1,58 @@
+import { User } from "./user";
+import { AuthenticatorPort, CryptorPort, ServicePort, StoragePort } from "./port";
+
+export default class Service implements ServicePort {
+    constructor(
+        private storage: StoragePort,
+        private authenticator: AuthenticatorPort,
+        private cryptor: CryptorPort
+    ) { }
+
+    async createUser(user: User): Promise<object> {
+        const hasUserByEmail: User | undefined = await this.storage.getUserByEmail(user.email);
+        if (hasUserByEmail) throw new Error("Já existe um registro de user com o mesmo email");
+
+        const encryptedPassword: string = await this.cryptor.encrypt(user.password);
+        const _user: User = await this.storage.persistUser({ ...user, password: encryptedPassword });
+
+        const accessToken: string = await this.authenticator.generateToken({ ..._user, password: '' });
+
+        return { token: accessToken }
+    }
+
+    async getUserByEmail(email: string): Promise<User> {
+        const user: User = await this.storage.findUserByEmail(email);
+        return user;
+    }
+
+    async getUserById(id: number): Promise<User> {
+        const user: User = await this.storage.findUserById(id);
+        return user;
+    }
+
+    async authenticateUserByEmail(email: string, password: string): Promise<object> {
+        const _user: User = await this.recognizeUserToAuthenticateByEmail(email, password);
+
+        const accessToken: string = await this.authenticator.generateToken({ ..._user, password: '' });
+
+        return { token: accessToken };
+    }
+
+    async recognizeUserToAuthenticateByEmail(email: string, password: string): Promise<User> {
+        const _user: User = await this.storage.findUserByEmail(email);
+        const isValid: boolean = await this.cryptor.compare(password, _user.password);
+        if (!isValid) throw new Error("Usuário não autorizado");
+
+        return _user;
+    }
+
+    async verifyUserAuthenticatedToken(token: string): Promise<void> {
+        await this.authenticator.verifyToken(token);
+    }
+
+    async getUserByToken(token: string): Promise<User> {
+        const user = await this.authenticator.getUserTokenClaim(token);
+        return user;
+    }
+
+}
