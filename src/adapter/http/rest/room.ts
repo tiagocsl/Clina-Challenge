@@ -2,8 +2,11 @@ import { IRouter, Request, Response, Router } from "express";
 import { checkSchema, Schema, validationResult } from "express-validator";
 import HttpStatusCodes from 'http-status-codes';
 
-import { Room } from '../../../domain/room/room';
+import multer from 'multer'
+
+import { Room, RoomImage } from '../../../domain/room/room';
 import { ServicePort } from "../../../domain/room/port";
+import path from "path";
 
 const createRoomValidationSchema: Schema = {
   name: {
@@ -72,11 +75,52 @@ export const createRoom = (service: ServicePort) => async (req: Request, res: Re
   }
 }
 
+export const uploadImages = (service: ServicePort) => async (req: Request, res: Response) => {
+  try {
+    const { roomId } = req.params;
+    const _files = req.files as Express.Multer.File[];
+    const _roomImages = _files.map((file) => {
+      return {
+        filename: file.filename,
+        filepath: file.path,
+        mimetype: file.mimetype,
+        size: file.size,
+        roomId: parseInt(roomId)
+      }
+    })
+    await service.uploadImages(_roomImages);
+    console.log(req.files)
+    res.status(HttpStatusCodes.CREATED).json(_roomImages);
+  } catch (err) {
+    res.status(HttpStatusCodes.BAD_REQUEST).json({ error: (err as Error).message });
+  }
+}
+
+export const getImageByFilename = (service: ServicePort) => async (req: Request, res: Response) => {
+  try {
+    const { filename } = req.params
+    const _roomImage = await service.getImageByFilename(filename) as RoomImage;
+    const dirname = path.resolve();
+    const fullfilepath = path.join(dirname, _roomImage.filepath);
+    res.status(HttpStatusCodes.OK).type(_roomImage.mimetype).sendFile(fullfilepath);
+  } catch (err) {
+    res.status(HttpStatusCodes.NOT_FOUND).json({ error: (err as Error).message });
+  }
+}
+
+export const getImagesByRoomId = (service: ServicePort) => async (req: Request, res: Response) => {
+  try {
+    const { roomId } = req.params
+    const _roomImages = await service.getImagesByRoomId(parseInt(roomId));
+    res.status(HttpStatusCodes.OK).json(_roomImages);
+  } catch (err) {
+    res.status(HttpStatusCodes.NOT_FOUND).json({ error: (err as Error).message });
+  }
+}
+
 export const listRooms = (service: ServicePort) => async (req: Request, res: Response) => {
   try {
-    let date = req.query.date;
-    let status = req.query.status;
-    let serializer = req.query.serializer;
+    const { date, status, serializer } = req.query;
     const _rooms = await service.listHandler(
       serializer as string | undefined,
       status as string | undefined,
@@ -100,10 +144,30 @@ export const getRoomById = (service: ServicePort) => async (req: Request, res: R
 
 export default function configureLoginRouter(service: ServicePort): IRouter {
   const router: IRouter = Router();
+  const imageUpload = multer({
+    storage: multer.diskStorage(
+      {
+        destination: function (req, file, cb) {
+          cb(null, 'images/');
+        },
+        filename: function (req, file, cb) {
+          cb(
+            null,
+            new Date().valueOf() +
+            '_' +
+            file.originalname
+          );
+        }
+      }
+    ),
+  });
 
   router.post("/create", checkSchema(createRoomValidationSchema), createRoom(service));
   router.get("/list", listRooms(service));
   router.get("/:id", getRoomById(service));
+  router.post("/upload-images/:roomId", imageUpload.array('image'), uploadImages(service));
+  router.get("/views-images/:filename", getImageByFilename(service));
+  router.get("/list-images/:roomId", getImagesByRoomId(service));
 
   return router;
 }

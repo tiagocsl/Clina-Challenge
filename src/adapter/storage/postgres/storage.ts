@@ -2,8 +2,8 @@ import moment from 'moment';
 
 import prisma from '../../../../prisma/prismaClient'
 
-import { User } from '../../../domain/user/user';
-import { Room } from '../../../domain/room/room';
+import { User, UserAvatar } from '../../../domain/user/user';
+import { Room, RoomImage } from '../../../domain/room/room';
 import { Schedule } from '../../../domain/schedule/schedule';
 
 import { StoragePort as UserStoragePort } from '../../../domain/user/port';
@@ -13,7 +13,9 @@ import { StoragePort as ScheduleStoragePort } from '../../../domain/schedule/por
 
 export default class PostgresStorage implements UserStoragePort, RoomStoragePort, ScheduleStoragePort {
   user = prisma.user;
+  userAvatars = prisma.userAvatar;
   room = prisma.room;
+  roomImages = prisma.roomImages;
   schedule = prisma.schedule;
 
 
@@ -84,6 +86,35 @@ export default class PostgresStorage implements UserStoragePort, RoomStoragePort
     return { ..._user, id: _user.id }
   }
 
+  async persistAvatars(userAvatar: UserAvatar[]): Promise<void> {
+    await this.userAvatars.createMany({
+      data: userAvatar
+    })
+
+    return;
+  }
+
+  async getAvatarsByUserId(user_id: number): Promise<UserAvatar[]> {
+    const _userAvatars = await this.userAvatars.findMany({
+      where: {
+        userId: user_id
+      }
+    });
+
+    return _userAvatars;
+  }
+
+  async getAvatarByFilename(imageName: string): Promise<UserAvatar | undefined> {
+    const _userAvatar = await this.userAvatars.findFirst({
+      where: {
+        filename: imageName
+      }
+    });
+    if (!_userAvatar) return;
+
+    return _userAvatar;
+  }
+
   /** 
    *
    * 
@@ -110,6 +141,35 @@ export default class PostgresStorage implements UserStoragePort, RoomStoragePort
     })
 
     return _room
+  }
+
+  async persistImages(roomImage: RoomImage[]): Promise<void> {
+    await this.roomImages.createMany({
+      data: roomImage
+    })
+
+    return;
+  }
+
+  async getImagesByRoomId(room_id: number): Promise<RoomImage[]> {
+    const _roomImages = await this.roomImages.findMany({
+      where: {
+        roomId: room_id
+      }
+    });
+
+    return _roomImages;
+  }
+
+  async getImageByFilename(imageName: string): Promise<RoomImage | undefined> {
+    const _roomImage = await this.roomImages.findFirst({
+      where: {
+        filename: imageName
+      }
+    });
+    if (!_roomImage) return;
+
+    return _roomImage;
   }
 
   async getRoomById(room_id: number): Promise<Room | undefined> {

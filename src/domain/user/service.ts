@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User, UserAvatar } from "./user";
 import { AuthenticatorPort, CryptorPort, ServicePort, StoragePort } from "./port";
 
 export default class Service implements ServicePort {
@@ -53,6 +53,34 @@ export default class Service implements ServicePort {
     async getUserByToken(token: string): Promise<User> {
         const user = await this.authenticator.getUserTokenClaim(token);
         return user;
+    }
+
+    async uploadAvatars(userAvatars: object[]): Promise<void> {
+        const _userAvatars = userAvatars as UserAvatar[];
+
+        const haveUserWithThisId: User | undefined = await this.storage.getUserById(_userAvatars[0].userId);
+        if (!haveUserWithThisId) throw new Error('Não existe um usuario com esse ID!');
+
+        await this.storage.persistAvatars(userAvatars as UserAvatar[]);
+        return;
+    }
+
+    async getAvatarsByUserId(user_id: number): Promise<UserAvatar[]> {
+        let _avatars = await this.storage.getAvatarsByUserId(user_id);
+        _avatars = _avatars.map((avatar) => {
+            return {
+                ...avatar,
+                size: Number(avatar.size)
+            }
+        })
+        return _avatars;
+    }
+
+    async getAvatarByFilename(avatarName: string): Promise<UserAvatar | undefined> {
+        const _avatar = await this.storage.getAvatarByFilename(avatarName);
+        if (!_avatar) throw new Error('Não existe uma avatarm com esse nome!');
+
+        return _avatar;
     }
 
 }

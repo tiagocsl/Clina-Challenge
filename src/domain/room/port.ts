@@ -1,7 +1,10 @@
-import { Room } from './room'
+import { Room, RoomImage } from './room'
 
 export interface ServicePort {
     createRoom(room: Room): Promise<Room>;
+    uploadImages(roomImages: object[]): Promise<void>;
+    getImagesByRoomId(room_id: number): Promise<RoomImage[]>;
+    getImageByFilename(imageName: string): Promise<RoomImage | undefined>
     getRoomById(room_id: number): Promise<Room | undefined>;
     listRooms(): Promise<Room[] | undefined>;
     listRoomsPerStatus(status: string): Promise<Room[] | undefined>;
@@ -11,6 +14,9 @@ export interface ServicePort {
 
 export interface StoragePort {
     persistRoom(room: Room): Promise<Room>;
+    persistImages(roomImage: RoomImage[]): Promise<void>;
+    getImageByFilename(imageName: string): Promise<RoomImage | undefined>
+    getImagesByRoomId(room_id: number): Promise<RoomImage[]>;
     getRoomById(room_id: number): Promise<Room | undefined>;
     getRoom(room: Room): Promise<Room | undefined>;
     listRooms(): Promise<Room[] | undefined>;

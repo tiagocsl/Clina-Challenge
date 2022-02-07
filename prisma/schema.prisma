@@ -15,6 +15,7 @@ model User {
   createdAt DateTime
   updatedAt DateTime @default(now())
 
+  UserAvatar UserAvatar[]
   @@index([email])
 }
 
@@ -33,7 +34,8 @@ model Room {
   createdAt    DateTime
   updatedAt    DateTime @default(now())
 
-  schedules Schedule[]
+  schedules  Schedule[]
+  RoomImages RoomImages[]
 }
 
 model Schedule {
@@ -44,6 +46,28 @@ model Schedule {
   createdAt DateTime
   updatedAt DateTime @default(now())
 
-  roomId Int  
+  roomId Int
   Room   Room @relation(fields: [roomId], references: [id])
+}
+
+model RoomImages {
+  id       Int    @id @default(autoincrement())
+  filename String
+  filepath String
+  mimetype String
+  size     BigInt
+
+  roomId Int
+  Room   Room @relation(fields: [roomId], references: [id])
+}
+
+model UserAvatar {
+  id       Int    @id @default(autoincrement())
+  filename String
+  filepath String
+  mimetype String
+  size     BigInt
+
+  userId Int
+  User   User @relation(fields: [userId], references: [id])
 }

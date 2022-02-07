@@ -1,4 +1,4 @@
-import { Room } from "./room";
+import { Room, RoomImage } from "./room";
 import { ServicePort, StoragePort } from "./port";
 import moment from "moment";
 
@@ -16,10 +16,39 @@ export default class Service implements ServicePort {
         return _room;
     }
 
+
     async getRoomById(room_id: number): Promise<Room | undefined> {
         const _room = await this.storage.getRoomById(room_id);
 
         return _room;
+    }
+
+    async uploadImages(roomImages: object[]): Promise<void> {
+        const _roomImages = roomImages as RoomImage[];
+
+        const haveRoomWithThisId: Room | undefined = await this.storage.getRoomById(_roomImages[0].roomId);
+        if (!haveRoomWithThisId) throw new Error('Não existe uma sala com esse ID!');
+
+        await this.storage.persistImages(roomImages as RoomImage[]);
+        return;
+    }
+
+    async getImagesByRoomId(room_id: number): Promise<RoomImage[]> {
+        let _images = await this.storage.getImagesByRoomId(room_id);
+        _images = _images.map((image) => {
+            return {
+                ...image,
+                size: Number(image.size)
+            }
+        })
+        return _images;
+    }
+
+    async getImageByFilename(imageName: string): Promise<RoomImage | undefined> {
+        const _image = await this.storage.getImageByFilename(imageName);
+        if (!_image) throw new Error('Não existe uma imagem com esse nome!');
+
+        return _image;
     }
 
     async listRooms(): Promise<Room[] | undefined> {

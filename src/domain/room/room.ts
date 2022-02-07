@@ -11,3 +11,12 @@ export interface Room {
     complement: string | null;
     neighborhood: string;
 }
+
+export interface RoomImage {
+    id: number;
+    filename: string;
+    filepath: string;
+    mimetype: string;
+    size: bigint | number;
+    roomId: number;
+}
