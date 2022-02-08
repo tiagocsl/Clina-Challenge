@@ -5,8 +5,9 @@
     "repository": "git@github.com:tiagocsl/Clina-Challenge.git",
     "license": "MIT",
     "scripts": {
+        "swagger-autogen": "node swagger/swagger.js",
         "dev": "nodemon",
-        "start": "prisma migrate deploy & ts-node index.ts",
+        "start": "set JWT_SECRET=ASEREHE & prisma migrate deploy & ts-node index.ts",
         "build": "tsc -p ./tsconfig.json & prisma generate",
         "build::start": "prisma migrate deploy & node dist/index.js"
     },
@@ -24,6 +25,7 @@
         "@types/passport": "^1.0.7",
         "@types/passport-jwt": "^3.0.6",
         "@types/passport-local": "^1.0.34",
+        "@types/swagger-ui-express": "^4.1.3",
         "nodemon": "^2.0.15",
         "prisma": "^3.5.0",
         "ts-node": "^10.4.0"
@@ -44,6 +46,8 @@
         "passport": "^0.5.2",
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
+        "swagger-autogen": "^2.18.8",
+        "swagger-ui-express": "^4.3.0",
         "ts-dotenv": "^0.8.3",
         "typescript": "^4.4.4"
     }

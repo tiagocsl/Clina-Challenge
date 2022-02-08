@@ -8,6 +8,6 @@
         "src",
         "index.ts"
     ],
-    "exec": "npm run dev::start",
+    "exec": "npm run start",
     "ext": "ts"
 }

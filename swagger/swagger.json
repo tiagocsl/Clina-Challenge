@@ -1,0 +1,1086 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "REST API",
+        "description": ""
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "tags": [
+        {
+            "name": "User"
+        },
+        {
+            "name": "Room"
+        },
+        {
+            "name": "Schedule"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Cria um login para usuário.",
+                "description": "Cria um novo login que será usado para acesso ao sistema.",
+                "requestBody": {
+                    "description": "Dados para criação do login",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterUser"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserCreated"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos ou incompletos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/authenticate": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Autentica um usuário que ainda não é cliente.",
+                "description": "Autentica um usuário, caso o usuário não existe, ou a combinação de usuário e senha, retorna erro.",
+                "requestBody": {
+                    "description": "Dados para autenticação do usuário",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "tigas@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "qwerty123"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "token"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhb.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIi.lpBikrwO7XOIIAfH"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Autenticação inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/upload-images": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Envia imagem avatar do usuário",
+                "parameters": [
+                    {
+                        "name": "image",
+                        "in": "query",
+                        "description": "Imagem",
+                        "required": true,
+                        "style": "form",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "image"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Imagem aceita",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "filename": {
+                                            "type": "string",
+                                            "description": "Nome que o arquivo foi salvo no banco!"
+                                        },
+                                        "filepath": {
+                                            "type": "string",
+                                            "description": "Caminho do arquivo salvo."
+                                        },
+                                        "mimetype": {
+                                            "type": "string",
+                                            "description": "Tipo do arquivo!"
+                                        },
+                                        "size": {
+                                            "type": "bigInt",
+                                            "description": "Tamanho do arquivo"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Token inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Não Autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "security": [
+                {
+                    "JWT": []
+                }
+            ]
+        },
+        "/user/views-images/{filename}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Nome do arquivo que pode ser obtido ao listar as imagens."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna a imagem"
+                    },
+                    "400": {
+                        "description": "Token inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Não Autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/user/list-images": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Imagens",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "filename": {
+                                            "type": "string",
+                                            "description": "Nome que o arquivo foi salvo no banco!"
+                                        },
+                                        "filepath": {
+                                            "type": "string",
+                                            "description": "Caminho do arquivo salvo."
+                                        },
+                                        "mimetype": {
+                                            "type": "string",
+                                            "description": "Tipo do arquivo!"
+                                        },
+                                        "size": {
+                                            "type": "bigInt",
+                                            "description": "Tamanho do arquivo"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Token inválida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Não Autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/room/create": {
+            "post": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Cria um login para usuário.",
+                "description": "Cria um novo login que será usado para acesso ao sistema.",
+                "requestBody": {
+                    "description": "Dados para criação do login",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "cep",
+                                    "publicPlace",
+                                    "neighborhood",
+                                    "uf",
+                                    "city",
+                                    "country",
+                                    "number",
+                                    "complement"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "sala 123"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "sala ao lado da 321"
+                                    },
+                                    "cep": {
+                                        "type": "string",
+                                        "example": "00000-000"
+                                    },
+                                    "publicPlace": {
+                                        "type": "string",
+                                        "example": "Rua Chapolin"
+                                    },
+                                    "neighborhood": {
+                                        "type": "string",
+                                        "example": "Vila"
+                                    },
+                                    "uf": {
+                                        "type": "string",
+                                        "example": "RJ"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Centro"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "example": "Brasil"
+                                    },
+                                    "number": {
+                                        "type": "string",
+                                        "example": "125A"
+                                    },
+                                    "complement": {
+                                        "type": "string",
+                                        "example": ""
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cria e retorna a entidade da sala criada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Room"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos ou incompletos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/room/list": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "description": "Retorna uma lista com todas as salas",
+                "parameters": [
+                    {
+                        "name": "serializer",
+                        "in": "path",
+                        "required": false,
+                        "type": "string",
+                        "description": "Listar por date ou por status."
+                    },
+                    {
+                        "name": "date",
+                        "in": "path",
+                        "required": false,
+                        "type": "string",
+                        "description": "Listar por date.",
+                        "example": "2022-02-10"
+                    },
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "required": false,
+                        "type": "string",
+                        "description": "Listar por status.",
+                        "enum": [
+                            "Disponiveil",
+                            "Indisponiveil",
+                            "Agendada"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Salas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Room"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos ou incompletos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/room/{id}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna Sala especificada!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Room"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/room/upload-images/{roomId}": {
+            "post": {
+                "tags": [
+                    "Room"
+                ],
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "image",
+                        "in": "query",
+                        "description": "Imagem",
+                        "required": true,
+                        "style": "form",
+                        "explode": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "image"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Imagem aceita",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "filename": {
+                                            "type": "string",
+                                            "description": "Nome que o arquivo foi salvo no banco!"
+                                        },
+                                        "filepath": {
+                                            "type": "string",
+                                            "description": "Caminho do arquivo salvo."
+                                        },
+                                        "mimetype": {
+                                            "type": "string",
+                                            "description": "Tipo do arquivo!"
+                                        },
+                                        "size": {
+                                            "type": "bigInt",
+                                            "description": "Tamanho do arquivo"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/room/views-images/{filename}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Nome do arquivo que pode ser obtido ao listar as imagens."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorna a imagem"
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/room/list-images/{roomId}": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "roomId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Imagens",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "filename": {
+                                            "type": "string",
+                                            "description": "Nome que o arquivo foi salvo no banco!"
+                                        },
+                                        "filepath": {
+                                            "type": "string",
+                                            "description": "Caminho do arquivo salvo."
+                                        },
+                                        "mimetype": {
+                                            "type": "string",
+                                            "description": "Tipo do arquivo!"
+                                        },
+                                        "size": {
+                                            "type": "bigInt",
+                                            "description": "Tamanho do arquivo"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule/": {
+            "post": {
+                "tags": [
+                    "Schedule"
+                ],
+                "description": "",
+                "requestBody": {
+                    "description": "Dados para autenticação do usuário",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "day",
+                                    "period",
+                                    "status",
+                                    "roomId"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "day": {
+                                        "type": "string",
+                                        "example": "09/02/2022"
+                                    },
+                                    "period": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Manhã",
+                                            "Tarde",
+                                            "Noite"
+                                        ],
+                                        "example": "Manhã"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Disponiveil",
+                                            "Indisponiveil",
+                                            "Agendada"
+                                        ],
+                                        "example": "Agendada"
+                                    },
+                                    "roomId": {
+                                        "type": "int",
+                                        "example": 1
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Agenda Criada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "day",
+                                        "period",
+                                        "status",
+                                        "roomId"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                        "day": {
+                                            "type": "string",
+                                            "example": "09/02/2022"
+                                        },
+                                        "period": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Manhã",
+                                                "Tarde",
+                                                "Noite"
+                                            ],
+                                            "example": "Manhã"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Disponiveil",
+                                                "Indisponiveil",
+                                                "Agendada"
+                                            ],
+                                            "example": "Agendada"
+                                        },
+                                        "roomId": {
+                                            "type": "int",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule/{scheduleId}": {
+            "put": {
+                "tags": [
+                    "Schedule"
+                ],
+                "description": "Atualiza o Status, da agenda especificada, para 'Agendada'",
+                "parameters": [
+                    {
+                        "name": "scheduleId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agendamento efetuado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "day",
+                                        "period",
+                                        "status",
+                                        "roomId"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                        "day": {
+                                            "type": "string",
+                                            "example": "09/02/2022"
+                                        },
+                                        "period": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Manhã",
+                                                "Tarde",
+                                                "Noite"
+                                            ],
+                                            "example": "Manhã"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Disponiveil",
+                                                "Indisponiveil",
+                                                "Agendada"
+                                            ],
+                                            "example": "Agendada"
+                                        },
+                                        "roomId": {
+                                            "type": "int",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Token inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Não Autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/schedule/{roomId}": {
+            "get": {
+                "tags": [
+                    "Schedule"
+                ],
+                "description": "Lista todas as agendas de uma sala",
+                "parameters": [
+                    {
+                        "name": "roomId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agendamento efetuado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "day",
+                                        "period",
+                                        "status",
+                                        "roomId"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                        "day": {
+                                            "type": "string",
+                                            "example": "09/02/2022"
+                                        },
+                                        "period": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Manhã",
+                                                "Tarde",
+                                                "Noite"
+                                            ],
+                                            "example": "Manhã"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "Disponiveil",
+                                                "Indisponiveil",
+                                                "Agendada"
+                                            ],
+                                            "example": "Agendada"
+                                        },
+                                        "roomId": {
+                                            "type": "int",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Sala inexistete",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erro"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RegisterUser": {
+                "required": [
+                    "email",
+                    "nome",
+                    "senha"
+                ],
+                "type": "object",
+                "properties": {
+                    "fullname": {
+                        "type": "string",
+                        "description": "Campo texto de preenchimento obrigatório para o preenchimento do nome completo.",
+                        "maxLength": 200,
+                        "example": "Joaquim José da Silva Xavier"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "teste@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "210491Ag"
+                    }
+                }
+            },
+            "UserCreated": {
+                "required": [
+                    "token"
+                ],
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLCJhb.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIi.lpBikrwO7XOIIAfH"
+                    }
+                }
+            },
+            "Room": {
+                "schema": {
+                    "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "cep",
+                        "publicPlace",
+                        "neighborhood",
+                        "uf",
+                        "city",
+                        "country",
+                        "number",
+                        "complement",
+                        "createdAt",
+                        "updatedAt"
+                    ],
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "int",
+                            "example": 1
+                        },
+                        "name": {
+                            "type": "string",
+                            "example": "sala 123"
+                        },
+                        "description": {
+                            "type": "string",
+                            "example": "sala ao lado da 321"
+                        },
+                        "cep": {
+                            "type": "string",
+                            "example": "00000-000"
+                        },
+                        "publicPlace": {
+                            "type": "string",
+                            "example": "Rua Chapolin"
+                        },
+                        "neighborhood": {
+                            "type": "string",
+                            "example": "Vila"
+                        },
+                        "uf": {
+                            "type": "string",
+                            "example": "RJ"
+                        },
+                        "city": {
+                            "type": "string",
+                            "example": "Centro"
+                        },
+                        "country": {
+                            "type": "string",
+                            "example": "Brasil"
+                        },
+                        "number": {
+                            "type": "string",
+                            "example": "125A"
+                        },
+                        "complement": {
+                            "type": "string",
+                            "example": ""
+                        },
+                        "createdAt": {
+                            "type": "string",
+                            "example": "2022-02-06T00:20:00.123Z"
+                        },
+                        "updatedAt": {
+                            "type": "string",
+                            "example": "2022-02-06T00:20:00.123Z"
+                        }
+                    }
+                }
+            },
+            "Erro": {
+                "description": "Mensagem de erro detalhada",
+                "properties": {
+                    "mensagem": {
+                        "type": "object",
+                        "description": "Conteúdo da mensagem de erro."
+                    }
+                }
+            },
+            "ImageObject": {
+                "type": "object",
+                "properties": {
+                    "filename": {
+                        "type": "string",
+                        "description": "Nome que o arquivo foi salvo no banco!"
+                    },
+                    "filepath": {
+                        "type": "string",
+                        "description": "Caminho do arquivo salvo."
+                    },
+                    "mimetype": {
+                        "type": "string",
+                        "description": "Tipo do arquivo!"
+                    },
+                    "size": {
+                        "type": "bigInt",
+                        "description": "Tamanho do arquivo"
+                    }
+                }
+            }
+        }
+    }
+}

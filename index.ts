@@ -1,6 +1,7 @@
 import http, { Server } from 'http';
 import express, { Application } from 'express';
 import session from 'express-session';
+import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -46,6 +47,11 @@ const run = async (): Promise<void> => {
         agendaService,
         authenticator
     ));
+
+    const swaggerData = require(process.cwd() + '/swagger/swagger.json');
+    app.use("/docs", swaggerUi.serve,
+        swaggerUi.setup(swaggerData)
+    )
 
     const server: Server = http.createServer(app);
 
