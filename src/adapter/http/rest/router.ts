@@ -18,6 +18,7 @@ export default function configRouter(
 ): IRouter {
     const router: IRouter = Router();
 
+    router.get("/", (req, res) => { res.status(200).json({}) });
     router.use("/user", configureUserRouter(userService, authenticator));
     router.use("/room", configureRoomRouter(roomService));
     router.use("/schedule", configureScheduleRouter(scheduleService, authenticator));

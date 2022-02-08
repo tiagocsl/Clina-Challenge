@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  node:
+    container_name: "clinaServer"
+    build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:clinacare@clinaDatabase:5432/clina-challenge?connect_timeout=300
+      - JWT_SECRET=clinaCareChallenge
+    volumes:
+      - ./:/home/node/app/
+    depends_on:
+      - postgresdb
+    ports:
+      - "3000:3000"
+    networks:
+      - default
+    command: "npm run-script start"
+  postgresdb:
+    container_name: "clinaDatabase"
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: clinacare
+      POSTGRES_DB: clina-challenge
+    networks:
+      - default
+networks:
+  default:
+volumes:
+  postgres-data:

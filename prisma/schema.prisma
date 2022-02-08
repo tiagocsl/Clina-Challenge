@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:211200@localhost:5432/clina-challenge"
+  url      = env("DATABASE_URL")
 }
 
 model User {
