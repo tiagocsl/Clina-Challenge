@@ -4,6 +4,7 @@ import HttpStatusCodes from 'http-status-codes';
 
 import { Schedule } from '../../../domain/schedule/schedule';
 import { ServicePort } from "../../../domain/schedule/port";
+import { AuthenticatorPort } from "../../../domain/user/port";
 
 const createScheduleValidationSchema: Schema = {
   day: {
@@ -61,13 +62,19 @@ export const createSchedule = (service: ServicePort) => async (req: Request, res
   }
 }
 
-export const bookAnSchedule = (service: ServicePort) => async (req: Request, res: Response) => {
+export const bookAnSchedule = (service: ServicePort, authenticator: AuthenticatorPort) => async (req: Request, res: Response) => {
   try {
+    const token = req.headers.authorization;
+    await (await authenticator.getUserTokenClaim(String(token).split(' ')[1])).id
     const scheduleId = parseInt(req.params.scheduleId);
     const _schedule = await service.bookAnSchedule(scheduleId);
     res.status(HttpStatusCodes.OK).json(_schedule);
   } catch (err) {
-    res.status(HttpStatusCodes.NOT_FOUND).json({ error: (err as Error).message });
+    const error = (err as Error);
+    if (error.message == "invalid signature" || error.message == "jwt must be provided")
+      res.status(HttpStatusCodes.FORBIDDEN).json(error)
+    else
+      res.status(HttpStatusCodes.BAD_REQUEST).json({ error: error.message });
   }
 }
 
@@ -81,11 +88,11 @@ export const getSchedulesByRoomId = (service: ServicePort) => async (req: Reques
   }
 }
 
-export default function configureLoginRouter(service: ServicePort): IRouter {
+export default function configureLoginRouter(service: ServicePort, authenticator: AuthenticatorPort): IRouter {
   const router: IRouter = Router();
 
   router.post("/", checkSchema(createScheduleValidationSchema), createSchedule(service));
-  router.put("/:scheduleId", bookAnSchedule(service));
+  router.put("/:scheduleId", bookAnSchedule(service, authenticator));
   router.get("/:roomId", getSchedulesByRoomId(service));
 
   return router;

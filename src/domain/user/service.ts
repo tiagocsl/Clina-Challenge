@@ -35,7 +35,7 @@ export default class Service implements ServicePort {
 
         const accessToken: string = await this.authenticator.generateToken({ ..._user, password: '' });
 
-        return { token: accessToken };
+        return { access_token: accessToken };
     }
 
     async recognizeUserToAuthenticateByEmail(email: string, password: string): Promise<User> {
@@ -76,8 +76,8 @@ export default class Service implements ServicePort {
         return _avatars;
     }
 
-    async getAvatarByFilename(avatarName: string): Promise<UserAvatar | undefined> {
-        const _avatar = await this.storage.getAvatarByFilename(avatarName);
+    async getAvatarByFilename(avatarName: string, user_id: number): Promise<UserAvatar | undefined> {
+        const _avatar = await this.storage.getAvatarByFilename(avatarName, user_id);
         if (!_avatar) throw new Error('Não existe uma avatarm com esse nome!');
 
         return _avatar;

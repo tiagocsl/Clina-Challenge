@@ -1,5 +1,7 @@
 import http, { Server } from 'http';
 import express, { Application } from 'express';
+import session from 'express-session';
+import passport from 'passport';
 import morgan from 'morgan';
 import cors from 'cors';
 
@@ -12,6 +14,8 @@ import UserService from './src/domain/user/service';
 import RoomService from './src/domain/room/service';
 import AgendaService from './src/domain/schedule/service';
 
+//const auth = passport.authenticate('jwt', { session: false });
+
 const run = async (): Promise<void> => {
     const storage: PostgresStorage = new PostgresStorage();
     const authenticator: JWTAuthenticator = new JWTAuthenticator(process.env.JWT_SECRET as string);
@@ -23,9 +27,18 @@ const run = async (): Promise<void> => {
 
     const app: Application = express();
     app.use(express.json());
-    app.use(morgan('dev'))
+    app.use(morgan('dev'));
     app.use(express.urlencoded({ extended: false }));
     app.use(cors());
+    app.use(session({
+        secret: "secret",
+        resave: false,
+        saveUninitialized: true,
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    (await import('./src/adapter/authenticator/passport/passport')).passportConfigure(userService);
 
     app.use("/api", configureRouter(
         userService,

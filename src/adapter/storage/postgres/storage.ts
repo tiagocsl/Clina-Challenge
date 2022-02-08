@@ -104,10 +104,11 @@ export default class PostgresStorage implements UserStoragePort, RoomStoragePort
     return _userAvatars;
   }
 
-  async getAvatarByFilename(imageName: string): Promise<UserAvatar | undefined> {
+  async getAvatarByFilename(imageName: string, user_id: number): Promise<UserAvatar | undefined> {
     const _userAvatar = await this.userAvatars.findFirst({
       where: {
-        filename: imageName
+        filename: imageName,
+        userId: user_id
       }
     });
     if (!_userAvatar) return;
@@ -350,8 +351,7 @@ export default class PostgresStorage implements UserStoragePort, RoomStoragePort
   async getSchedulesByRoomId(room_id: number): Promise<Schedule[]> {
     const _schedules = await this.schedule.findMany({
       where: {
-        roomId: room_id,
-        status: "Disponivel"
+        roomId: room_id
       }
     })
 
