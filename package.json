@@ -7,7 +7,7 @@
     "scripts": {
         "swagger-autogen": "node swagger/swagger.js",
         "dev": "nodemon",
-        "start": "set JWT_SECRET=ASEREHE & prisma migrate deploy & ts-node index.ts",
+        "start": "prisma migrate deploy & ts-node index.ts",
         "build": "tsc -p ./tsconfig.json & prisma generate",
         "build::start": "prisma migrate deploy & node dist/index.js"
     },

@@ -4,7 +4,7 @@ services:
     container_name: "clinaServer"
     build: .
     environment:
-      - DATABASE_URL=postgresql://postgres:clinacare@clinaDatabase:5432/clina-challenge?connect_timeout=300
+      - DATABASE_URL=postgresql://postgres:clinacare@clinaDatabase:5432/clina-challenge
       - JWT_SECRET=clinaCareChallenge
     volumes:
       - ./:/home/node/app/

@@ -1,0 +1,475 @@
+_type: export
+__export_format: 4
+__export_date: 2022-02-08T22:43:22.918Z
+__export_source: insomnia.desktop.app:v2021.7.2
+resources:
+  - _id: req_b4bb2abbe01746848a047fafea002499
+    parentId: fld_d057896c68a7418ebe7e965ac7ad56bf
+    modified: 1644347252304
+    created: 1644105047203
+    url: http://localhost:3000/api/user/register
+    name: Create User
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"fullName":"Guilherme Cabral",
+        	"email": "guicabral.t1@gmail.com",
+          "password": "211200Sa" 
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_92a0041c03d44908a0b04946ee82b77d
+    authentication: {}
+    metaSortKey: -1644105047203
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_d057896c68a7418ebe7e965ac7ad56bf
+    parentId: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    modified: 1644172486987
+    created: 1644172486987
+    name: User
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1644172486987
+    _type: request_group
+  - _id: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    parentId: null
+    modified: 1644105036365
+    created: 1644105036365
+    name: Clina Care
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_94ce51b3e64a4970866494c1c765b505
+    parentId: fld_d057896c68a7418ebe7e965ac7ad56bf
+    modified: 1644342837443
+    created: 1644273959364
+    url: localhost:3000/api/user/authenticate
+    name: Authenticate User
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "guicabral.t1@gmail.com",
+          "password": "211200Sa" 
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_92a0041c03d44908a0b04946ee82b77d
+    authentication: {}
+    metaSortKey: -1644105047178
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_390486e4eea240eabc63d9b9dcd0ad8b
+    parentId: fld_d057896c68a7418ebe7e965ac7ad56bf
+    modified: 1644294043369
+    created: 1644224682793
+    url: localhost:3000/api/user/upload-images
+    name: Upload Avatar
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: image
+          value: ""
+          id: pair_0c707856f7c14913947988003e66a718
+          type: file
+          multiline: null
+          fileName: C:\Users\tiago\Downloads\Rc186bcd6b566ca50948ec3ebc276e5aa.jpg
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_e4cf7c8d8ee240bcb37e50120738fcca
+      - id: pair_c04d8daa8bbe41448f36662f0e96d290
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJndWljYWJyYWwudDFAZ21haWwuY29tIiwiZnVsbE5hbWUiOiJHdWlsaGVybWUgQ2FicmFsIiwicGFzc3dvcmQiOiIiLCJjcmVhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2MFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2M1oiLCJpYXQiOjE2NDQyOTI1NjAsImV4cCI6MTY0NDMyMTM2MH0.-h2yMJtd1NKFaBlCBycHWlE5oEsO9oASBl13Urzrw-w
+        description: ""
+    authentication: {}
+    metaSortKey: -1644105047153
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cf27b296c5c0446cb8e864d03961805f
+    parentId: fld_d057896c68a7418ebe7e965ac7ad56bf
+    modified: 1644293542648
+    created: 1644224693479
+    url: localhost:3000/api/user/views-images/1644224778337_WhatsApp Image
+      2021-06-18 at 17.11.33.jpeg
+    name: View Avatar
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - id: pair_a5033733f39c4df58a1ff1198404d8ae
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJndWljYWJyYWwudDFAZ21haWwuY29tIiwiZnVsbE5hbWUiOiJHdWlsaGVybWUgQ2FicmFsIiwicGFzc3dvcmQiOiIiLCJjcmVhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2MFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2M1oiLCJpYXQiOjE2NDQyOTI1NjAsImV4cCI6MTY0NDMyMTM2MH0.-h2yMJtd1NKFaBlCBycHWlE5oEsO9oASBl13Urzrw-w
+        description: ""
+    authentication: {}
+    metaSortKey: -1644105047103
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b67f2b39013a41ddb614e9a2345e274b
+    parentId: fld_d057896c68a7418ebe7e965ac7ad56bf
+    modified: 1644293528404
+    created: 1644224704658
+    url: localhost:3000/api/user/list-images
+    name: List images by user id
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - id: pair_ee16cc059dde402bba19fd95186b434d
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJndWljYWJyYWwudDFAZ21haWwuY29tIiwiZnVsbE5hbWUiOiJHdWlsaGVybWUgQ2FicmFsIiwicGFzc3dvcmQiOiIiLCJjcmVhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2MFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2M1oiLCJpYXQiOjE2NDQyOTI1NjAsImV4cCI6MTY0NDMyMTM2MH0.-h2yMJtd1NKFaBlCBycHWlE5oEsO9oASBl13Urzrw-w
+        description: ""
+    authentication: {}
+    metaSortKey: -1644105047053
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9d69a85d3e044d2dbfce283b2cf1d2c8
+    parentId: fld_5940a62ff311430aada2870c1bf260ad
+    modified: 1644348586575
+    created: 1644107701004
+    url: localhost:3000/api/room/create
+    name: Create Room
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+            "name": "Sala 213",
+            "description": "sala direita a da 231",
+            "uf": "RJ",
+            "cep": "25255-352",
+            "city": "Duque de Caxias",
+            "number": "266 3",
+            "country": "Brasil",
+            "publicPlace": "Rua Bali",
+            "complement": "Muro Amarelo",
+            "neighborhood": "Jardim Olimpo"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_e4cf7c8d8ee240bcb37e50120738fcca
+    authentication: {}
+    metaSortKey: -1644107701004
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5940a62ff311430aada2870c1bf260ad
+    parentId: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    modified: 1644172468937
+    created: 1644172468937
+    name: Room
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1644172468937
+    _type: request_group
+  - _id: req_a60d515632b148179cae4426b19b5def
+    parentId: fld_5940a62ff311430aada2870c1bf260ad
+    modified: 1644220998163
+    created: 1644199925014
+    url: localhost:3000/api/room/upload-images/1
+    name: Upload Images
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: image
+          value: ""
+          id: pair_0c707856f7c14913947988003e66a718
+          type: file
+          multiline: null
+          fileName: C:\Users\tiago\Downloads\image.jpeg
+        - id: pair_b56aae944aea49979cee613b6c55464b
+          name: image
+          value: ""
+          description: ""
+          type: file
+          multiline: null
+          fileName: C:\Users\tiago\Downloads\WhatsApp Image 2022-01-11 at 19.29.06.jpeg
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_e4cf7c8d8ee240bcb37e50120738fcca
+    authentication: {}
+    metaSortKey: -1644107700991.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d1e96bee940f45c4a66a80409171106b
+    parentId: fld_5940a62ff311430aada2870c1bf260ad
+    modified: 1644250955936
+    created: 1644200707194
+    url: localhost:3000/api/room/views-images/1644224778337_WhatsApp Image
+      2021-06-18 at 17.11.33.jpeg
+    name: View Image
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644107700985.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_ddcb4518732f4a598591f5933b27b925
+    parentId: fld_5940a62ff311430aada2870c1bf260ad
+    modified: 1644222763864
+    created: 1644222756412
+    url: localhost:3000/api/room/list-images/1
+    name: List images by room id
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644107700982.125
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b56599989dc147b28223bfc230576f60
+    parentId: fld_5940a62ff311430aada2870c1bf260ad
+    modified: 1644172480560
+    created: 1644129389441
+    url: localhost:3000/api/room/3
+    name: Get Room By Id
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644107700979
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_ce3d6e74ae814f6581de7cfac4db41c4
+    parentId: fld_5940a62ff311430aada2870c1bf260ad
+    modified: 1644172478557
+    created: 1644126637537
+    url: localhost:3000/api/room/list
+    name: List Rooms
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644107700954
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_223da74bb5854cf1b6430acfd06ab8e8
+    parentId: fld_d287fdf53c47416389ecbd78b5095bd2
+    modified: 1644350979333
+    created: 1644120984288
+    url: localhost:3000/api/schedule/
+    name: Create Agenda
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"day": "09/02/2022",
+        	"period": "Noite",
+        	"status": "Disponivel",
+        	"roomId": 2
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_db9de7a1c3e946a4af583e9f31b0651d
+    authentication: {}
+    metaSortKey: -1644120984388
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_d287fdf53c47416389ecbd78b5095bd2
+    parentId: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    modified: 1644172453366
+    created: 1644172453366
+    name: Schedule
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1644172453366
+    _type: request_group
+  - _id: req_7e8e2e203a42491c8e51f1ccc36e36f5
+    parentId: fld_d287fdf53c47416389ecbd78b5095bd2
+    modified: 1644293872478
+    created: 1644170876521
+    url: localhost:3000/api/schedule/1
+    name: Get Schedule By Room Id
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644120984375.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b0c3b99e396840ed86594e7b28916319
+    parentId: fld_d287fdf53c47416389ecbd78b5095bd2
+    modified: 1644351362514
+    created: 1644171683290
+    url: localhost:3000/api/schedule/2
+    name: Reservar uma agenda
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_7e9fa0e98fde43d595adff27bf602431
+      - id: pair_9146831615cd419a92fdf55d115f0f71
+        name: Authorization
+        value: Bearer
+          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJndWljYWJyYWwudDFAZ21haWwuY29tIiwiZnVsbE5hbWUiOiJHdWlsaGVybWUgQ2FicmFsIiwicGFzc3dvcmQiOiIiLCJjcmVhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2MFoiLCJ1cGRhdGVkQXQiOiIyMDIyLTAyLTA3VDA5OjA2OjE0LjE2M1oiLCJpYXQiOjE2NDQyOTI1NjAsImV4cCI6MTY0NDMyMTM2MH0.-h2yMJtd1NKFaBlCBycHWlE5oEsO9oASBl13Urzrw-w
+        description: ""
+    authentication: {}
+    metaSortKey: -1644120984363
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_3e895ddd1c38541fd2af416b4ffff9cc1db9c412
+    parentId: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    modified: 1644105036371
+    created: 1644105036371
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1644105036371
+    _type: environment
+  - _id: jar_3e895ddd1c38541fd2af416b4ffff9cc1db9c412
+    parentId: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    modified: 1644339224871
+    created: 1644105036373
+    name: Default Jar
+    cookies:
+      - key: connect.sid
+        value: s%3ATFZY4PCbZsSl1avztdVF5UL_whe4rN4R.DAyB%2FO4HWCd2Kn9Cv3Rry5u9mxjuhw80krNINQJ9SKA
+        domain: localhost
+        path: /
+        httpOnly: true
+        hostOnly: true
+        creation: 2022-02-07T22:48:50.623Z
+        lastAccessed: 2022-02-08T16:53:44.871Z
+        id: "4858678234973701"
+    _type: cookie_jar
+  - _id: spc_830b8522ac2e4c96b95617fc575c8747
+    parentId: wrk_c9693a0ae7b14fe4bf7fce6b8dc72c37
+    modified: 1644105036367
+    created: 1644105036367
+    fileName: Clina Care
+    contents: ""
+    contentType: yaml
+    _type: api_spec
